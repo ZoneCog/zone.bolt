@@ -3,6 +3,7 @@ import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { IconButton } from '~/components/ui/IconButton';
 import { workbenchStore } from '~/lib/stores/workbench';
 import { PortDropdown } from './PortDropdown';
+import DOMPurify from 'dompurify';
 
 type ResizeSide = 'left' | 'right' | null;
 
@@ -233,7 +234,8 @@ export const Preview = memo(() => {
             }}
             onKeyDown={(event) => {
               if (event.key === 'Enter' && validateUrl(url)) {
-                setIframeUrl(url);
+                const sanitizedUrl = DOMPurify.sanitize(url);
+                setIframeUrl(sanitizedUrl);
 
                 if (inputRef.current) {
                   inputRef.current.blur();
